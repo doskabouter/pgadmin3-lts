@@ -247,10 +247,12 @@ int dlgTable::Go(bool modal)
 
 	// new "of type" combobox
 	wxString typeQuery = wxT("SELECT t.oid, t.typname ")
-	                     wxT("FROM pg_type t, pg_namespace n ")
-	                     wxT("WHERE t.typtype='c' AND t.typnamespace=n.oid ")
-	                     wxT("AND NOT (n.nspname like 'pg_%' OR n.nspname='information_schema') ")
-	                     wxT("ORDER BY typname");
+                       wxT("FROM pg_type t ")
+                       wxT("LEFT JOIN pg_catalog.pg_namespace n ON n.oid = t.typnamespace ")
+                       wxT("WHERE (t.typrelid = 0 OR (SELECT c.relkind = 'c' FROM pg_catalog.pg_class c WHERE c.oid = t.typrelid)) ")
+                       wxT("AND NOT EXISTS(SELECT 1 FROM pg_catalog.pg_type el WHERE el.oid = t.typelem AND el.typarray = t.oid) ")
+                       wxT("AND n.nspname NOT IN ('pg_catalog', 'information_schema') ")
+                       wxT("ORDER BY typname");
 	cbOfType->Insert(wxEmptyString, 0, (void *)0);
 	cbOfType->FillOidKey(connection, typeQuery);
 	cbOfType->SetSelection(0);
