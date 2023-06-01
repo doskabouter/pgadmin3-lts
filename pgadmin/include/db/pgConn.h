@@ -90,7 +90,7 @@ public:
 	       int port = 5432, const wxString &rolename = wxT(""), int sslmode = 0, OID oid = 0,
 	       const wxString &applicationname = wxT("pgAdmin"),
 	       const wxString &sslcert = wxT(""), const wxString &sslkey = wxT(""), const wxString &sslrootcert = wxT(""), const wxString &sslcrl = wxT(""),
-	       const bool sslcompression = true);
+	       const bool sslcompression = true, const wxString& description = wxT(""));
 	~pgConn();
 
 	bool IsSuperuser();
@@ -215,6 +215,12 @@ public:
 	{
 		return conn ? PQbackendPID(conn) : 0;
 	}
+
+	wxString GetDescription() const
+	{
+		return save_description;
+	}
+
 	int GetStatus() const;
 	int GetLastResultStatus() const
 	{
@@ -302,7 +308,7 @@ private:
 	wxString connstr;
 
 	wxString save_server, save_service, save_hostaddr, save_database, save_username, save_password, save_rolename, save_applicationname;
-	wxString save_sslcert, save_sslkey, save_sslrootcert, save_sslcrl;
+	wxString save_sslcert, save_sslkey, save_sslrootcert, save_sslcrl, save_description;
 	int save_port, save_sslmode;
 	bool save_sslcompression;
 	OID save_oid;

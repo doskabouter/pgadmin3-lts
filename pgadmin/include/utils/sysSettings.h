@@ -786,6 +786,16 @@ public:
 		Write(wxT("OptionsLastTreeItem"), newval);
 	}
 
+	bool GetUseDescription() const
+	{
+		bool b;
+		Read(wxT("UseDescription"), &b, false);
+		return b;
+	}
+	void SetUseDescription(const bool newval)
+	{
+		WriteBool(wxT("UseDescription"), newval);
+	}
 
 	// Functions for storing settings
 	bool Write(const wxString &key, const wxString &value)

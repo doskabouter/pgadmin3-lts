@@ -230,15 +230,17 @@ pgConn *pgServer::CreateConn(wxString dbName, OID oid, wxString applicationname)
 	}
 
 	pgConn *conn = NULL;
+	wxString descr = settings->GetUseDescription() ? description : wxT("");
+
 #if defined(HAVE_OPENSSL_CRYPTO) || defined(HAVE_GCRYPT)
-	if(sshTunnel)
+	if (sshTunnel)
 	{
-		conn = new pgConn(local_listenhost, service, hostaddr, dbName, username, password, local_listenport, rolename, ssl, oid, applicationname, sslcert, sslkey, sslrootcert, sslcrl, sslcompression);
+		conn = new pgConn(local_listenhost, service, hostaddr, dbName, username, password, local_listenport, rolename, ssl, oid, applicationname, sslcert, sslkey, sslrootcert, sslcrl, sslcompression, descr);
 	}
 	else
 #endif
 	{
-		conn = new pgConn(GetName(), service, hostaddr, dbName, username, password, port, rolename, ssl, oid, applicationname, sslcert, sslkey, sslrootcert, sslcrl, sslcompression);
+		conn = new pgConn(GetName(), service, hostaddr, dbName, username, password, port, rolename, ssl, oid, applicationname, sslcert, sslkey, sslrootcert, sslcrl, sslcompression, descr);
 	}
 
 	if (conn && conn->GetStatus() != PGCONN_OK)

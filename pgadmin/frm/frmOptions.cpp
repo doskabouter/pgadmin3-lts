@@ -91,6 +91,9 @@
 #define txtThousandsSeparator       CTRL_TEXT("txtThousandsSeparator")
 #define chkAutoRollback             CTRL_CHECKBOX("chkAutoRollback")
 #define chkAutoCommit               CTRL_CHECKBOX("chkAutoCommit")
+//todo: add checkbox to form.
+//for now this can only be changed from the registry [HKCU\Software\pgAdmin III], "UseDescription"="true"
+//#define chkUseDescription           CTRL_CHECKBOX("chkUseDescription")
 #define chkDoubleClickProperties    CTRL_CHECKBOX("chkDoubleClickProperties")
 #define chkShowNotices			    CTRL_CHECKBOX("chkShowNotices")
 #define cbLanguage                  CTRL_COMBOBOX("cbLanguage")
@@ -676,6 +679,7 @@ void frmOptions::OnOK(wxCommandEvent &ev)
 	settings->SetThousandsSeparator(txtThousandsSeparator->GetValue());
 	settings->SetAutoRollback(chkAutoRollback->GetValue());
 	settings->SetAutoCommit(chkAutoCommit->GetValue());
+	//settings->SetUseDescription(chkUseDescription->GetValue());
 	settings->SetDoubleClickProperties(chkDoubleClickProperties->GetValue());
 	settings->SetShowNotices(chkShowNotices->GetValue());
 

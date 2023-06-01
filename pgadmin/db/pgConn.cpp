@@ -52,7 +52,7 @@ static void pgNoticeProcessor(void *arg, const char *message)
 pgConn::pgConn(const wxString &server, const wxString &service, const wxString &hostaddr, const wxString &database, const wxString &username, const wxString &password,
                int port, const wxString &rolename, int sslmode, OID oid, const wxString &applicationname,
                const wxString &sslcert, const wxString &sslkey, const wxString &sslrootcert, const wxString &sslcrl,
-               const bool sslcompression) : m_cancelConn(NULL)
+               const bool sslcompression, const wxString& description) : m_cancelConn(NULL)
 {
 	wxString msg;
 
@@ -72,6 +72,7 @@ pgConn::pgConn(const wxString &server, const wxString &service, const wxString &
 	save_sslrootcert = sslrootcert;
 	save_sslcrl = sslcrl;
 	save_sslcompression = sslcompression;
+	save_description = description;
 
 	memset(features, 0, sizeof(features));
 	majorVersion = 0;
@@ -653,10 +654,15 @@ wxString pgConn::GetName() const
 	wxString str;
 	if (save_service.IsEmpty())
 	{
-		if (dbHost.IsEmpty())
-			str.Printf(_("%s on local socket"), save_database.c_str());
+		if (save_description.IsEmpty())
+		{
+			if (dbHost.IsEmpty())
+				str.Printf(_("%s on local socket"), save_database.c_str());
+			else
+				str.Printf(_("%s on %s@%s:%d"), save_database.c_str(), GetUser().c_str(), dbHost.c_str(), GetPort());
+		}
 		else
-			str.Printf(_("%s on %s@%s:%d"), save_database.c_str(), GetUser().c_str(), dbHost.c_str(), GetPort());
+			str.Printf(_("%s on %s@%s"), save_database.c_str(), GetUser().c_str(), save_description.c_str());
 	}
 	else
 		str.Printf(_("service %s"), save_service.c_str());
