@@ -111,6 +111,7 @@ pgadmin3_SOURCES += \
 	include/images/ex_cte_scan.png \
 	include/images/ex_delete.png \
 	include/images/ex_foreign_scan.png \
+	include/images/ex_gather.png \
 	include/images/ex_group.png \
 	include/images/ex_hash.png \
 	include/images/ex_hash_anti_join.png \
@@ -134,6 +135,7 @@ pgadmin3_SOURCES += \
 	include/images/ex_nested.png \
 	include/images/ex_nested_loop_anti_join.png \
 	include/images/ex_nested_loop_semi_join.png \
+	include/images/ex_parscan.png \
 	include/images/ex_recursive_union.png \
 	include/images/ex_result.png \
 	include/images/ex_scan.png \

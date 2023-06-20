@@ -29,6 +29,7 @@
 #include "images/ex_cte_scan.pngc"
 #include "images/ex_delete.pngc"
 #include "images/ex_foreign_scan.pngc"
+#include "images/ex_gather.pngc"
 #include "images/ex_group.pngc"
 #include "images/ex_hash.pngc"
 #include "images/ex_hash_anti_join.pngc"
@@ -52,6 +53,7 @@
 #include "images/ex_nested.pngc"
 #include "images/ex_nested_loop_anti_join.pngc"
 #include "images/ex_nested_loop_semi_join.pngc"
+#include "images/ex_parscan.pngc"
 #include "images/ex_recursive_union.pngc"
 #include "images/ex_result.pngc"
 #include "images/ex_scan.pngc"
@@ -187,6 +189,16 @@ ExplainShape *ExplainShape::Create(long level, ExplainShape *last, const wxStrin
 	wxString token4;
 	if (tokens.HasMoreTokens())
 		token4 = tokens.GetNextToken();
+
+	bool isParallel = false;
+	if (token == wxT("Parallel"))
+	{
+		isParallel = true;
+		token = token2;
+		token2 = token3;
+		token3 = token4;
+		token4 = wxT("");
+	}
 	wxString descr;
 	if (costPos > 0)
 		descr = str.Left(costPos);
@@ -219,6 +231,8 @@ ExplainShape *ExplainShape::Create(long level, ExplainShape *last, const wxStrin
 
 
 	// possible keywords can be found in postgresql/src/backend/commands/explain.c
+	
+	//TODO: test all cases which can be parallelized
 
 	if (token == wxT("Total"))              return 0;
 	else if (token == wxT("Trigger"))       return 0;
@@ -377,7 +391,7 @@ ExplainShape *ExplainShape::Create(long level, ExplainShape *last, const wxStrin
 		else if (token == wxT("Values"))
 			s = new ExplainShape(*ex_values_scan_png_img, descr, 3, 2);
 		else
-			s = new ExplainShape(*ex_scan_png_img, descr, 3, 2);
+			s = isParallel ? new ExplainShape(*ex_parscan_png_img, descr, 4, 3) : new ExplainShape(*ex_scan_png_img, descr, 3, 2);
 	}
 	else if (token == wxT("Index"))
 	{
@@ -409,6 +423,8 @@ ExplainShape *ExplainShape::Create(long level, ExplainShape *last, const wxStrin
 		s = new ExplainShape(*ex_broadcast_motion_png_img, descr);
 	else if (token == wxT("Redistribute") && token2 == wxT("Motion"))
 		s = new ExplainShape(*ex_redistribute_motion_png_img, descr);
+
+	else if (token == wxT("Gather")) s = new ExplainShape(*ex_gather_png_img, descr);
 
 	if (!s)
 		s = new ExplainShape(*ex_unknown_png_img, descr);
