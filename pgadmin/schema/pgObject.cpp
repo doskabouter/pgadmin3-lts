@@ -531,14 +531,14 @@ void pgObject::ShowDependencies(frmMain *form, ctlListView *Dependencies, const 
 	{
 		sql = wxT("SELECT DISTINCT dep.deptype, dep.refclassid, cl.relkind, ad.adbin, ad.adsrc, \n");
 	}
-	sql += wxT("       CASE WHEN cl.relkind IS NOT NULL THEN cl.relkind || COALESCE(dep.refobjsubid::text, '')\n")
+	sql += wxT("       CASE WHEN cl.relkind IS NOT NULL THEN cl.relkind::text || COALESCE(dep.refobjsubid::text, '')\n")
 	       wxT("            WHEN tg.oid IS NOT NULL THEN 'T'::text\n")
 	       wxT("            WHEN ty.oid IS NOT NULL THEN 'y'::text\n")
 	       wxT("            WHEN ns.oid IS NOT NULL THEN 'n'::text\n")
 	       wxT("            WHEN pr.oid IS NOT NULL THEN 'p'::text\n")
 	       wxT("            WHEN la.oid IS NOT NULL THEN 'l'::text\n")
 	       wxT("            WHEN rw.oid IS NOT NULL THEN 'R'::text\n")
-	       wxT("            WHEN co.oid IS NOT NULL THEN 'C'::text || contype\n")
+	       wxT("            WHEN co.oid IS NOT NULL THEN 'C'::text || contype::text\n")
 	       wxT("            WHEN ad.oid IS NOT NULL THEN 'A'::text\n")
 	       wxT("            ELSE '' END AS type,\n")
 	       wxT("       COALESCE(coc.relname, clrw.relname) AS ownertable,\n")
@@ -708,14 +708,14 @@ void pgObject::ShowDependents(frmMain *form, ctlListView *referencedBy, const wx
 	{
 		sql = wxT("SELECT DISTINCT dep.deptype, dep.classid, cl.relkind, ad.adbin, ad.adsrc, \n");
 	}
-	sql += wxT("       CASE WHEN cl.relkind IS NOT NULL THEN cl.relkind || COALESCE(dep.objsubid::text, '')\n")
+	sql += wxT("       CASE WHEN cl.relkind IS NOT NULL THEN cl.relkind::text || COALESCE(dep.objsubid::text, '')\n")
 	       wxT("            WHEN tg.oid IS NOT NULL THEN 'T'::text\n")
 	       wxT("            WHEN ty.oid IS NOT NULL THEN 'y'::text\n")
 	       wxT("            WHEN ns.oid IS NOT NULL THEN 'n'::text\n")
 	       wxT("            WHEN pr.oid IS NOT NULL THEN 'p'::text\n")
 	       wxT("            WHEN la.oid IS NOT NULL THEN 'l'::text\n")
 	       wxT("            WHEN rw.oid IS NOT NULL THEN 'R'::text\n")
-	       wxT("            WHEN co.oid IS NOT NULL THEN 'C'::text || contype\n")
+	       wxT("            WHEN co.oid IS NOT NULL THEN 'C'::text || contype::text\n")
 	       wxT("            WHEN ad.oid IS NOT NULL THEN 'A'::text\n")
 	       wxT("            ELSE '' END AS type,\n")
 	       wxT("       COALESCE(coc.relname, clrw.relname) AS ownertable,\n")
